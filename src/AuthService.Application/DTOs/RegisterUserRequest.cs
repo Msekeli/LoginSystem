@@ -1,8 +1,5 @@
 namespace AuthService.Application.DTOs;
 
-/// <summary>
-/// Request model for user registration.
-/// </summary>
 public class RegisterUserRequest
 {
     public string FirstName { get; init; } = string.Empty;

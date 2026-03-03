@@ -1,8 +1,5 @@
 namespace AuthService.Application.DTOs;
 
-/// <summary>
-/// Returned when fetching user details.
-/// </summary>
 public class UserResponse
 {
     public Guid Id { get; init; }
