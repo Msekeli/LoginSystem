@@ -10,7 +10,7 @@ The application allows users to:
 - Log in using their credentials
 - Retrieve their user details after authentication
 - 
-![image alt]([image_url](https://github.com/Msekeli/LoginSystem/blob/103a00777042f99d43536439482e75a226bc67cd/auth-system-screenshots.png))
+![image alt](https://github.com/Msekeli/LoginSystem/blob/103a00777042f99d43536439482e75a226bc67cd/auth-system-screenshots.png)
 
 The backend exposes REST API endpoints which are consumed by a React frontend application.
 
