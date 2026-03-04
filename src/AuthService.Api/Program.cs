@@ -49,12 +49,28 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+// ADD CORS HERE
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.WebHost.UseUrls("http://0.0.0.0:8080");
 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+
+// ENABLE CORS BEFORE AUTH
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
