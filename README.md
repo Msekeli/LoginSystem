@@ -4,15 +4,15 @@
 
 This project is a full-stack authentication system built as part of a developer assessment. It demonstrates how a typical login workflow works in a modern web application using a clean and maintainable architecture.
 
-The application allows users to:
+The application allows users to: 
 
 - Register a new account
 - Log in using their credentials
 - Retrieve their user details after authentication
+- 
+![image alt]([image_url](https://github.com/Msekeli/LoginSystem/blob/103a00777042f99d43536439482e75a226bc67cd/auth-system-screenshots.png))
 
 The backend exposes REST API endpoints which are consumed by a React frontend application.
-
----
 
 ## Tech Stack
 
