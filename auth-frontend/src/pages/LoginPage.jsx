@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login as loginRequest } from "../api/authService";
 import { useAuth } from "../context/useAuth";
+import AuthLayout from "../components/AuthLayout";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -15,8 +18,14 @@ export default function LoginPage() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  function handleChange(event) {
-    const { name, value } = event.target;
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/me");
+    }
+  }, [isAuthenticated, navigate]);
+
+  function handleChange(e) {
+    const { name, value } = e.target;
 
     setFormData((prev) => ({
       ...prev,
@@ -24,9 +33,8 @@ export default function LoginPage() {
     }));
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-
+  async function handleSubmit(e) {
+    e.preventDefault();
     setError(null);
     setIsLoading(true);
 
@@ -36,47 +44,57 @@ export default function LoginPage() {
       login(response.token);
 
       navigate("/me");
-    } catch {
-      setError("Invalid email or password.");
+    } catch (error) {
+      console.error(error);
+      setError("Invalid email or password");
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-white p-8 rounded-lg shadow"
-      >
-        <h1 className="text-2xl font-semibold mb-6 text-center">Login</h1>
+    <AuthLayout title="Login">
+      {error && (
+        <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
+      )}
 
-        {error && (
-          <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
-        )}
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label className="text-sm font-medium">Email</label>
 
-        <div className="mb-4">
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder="example@email.com"
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full border rounded p-2"
+            className="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none"
           />
         </div>
 
-        <div className="mb-6">
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            className="w-full border rounded p-2"
-          />
+        <div className="mb-5">
+          <label className="text-sm font-medium">Password</label>
+
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Enter password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full border rounded p-2 pr-10 focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-2 top-2 text-sm text-gray-500"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
         </div>
 
         <button
@@ -84,16 +102,16 @@ export default function LoginPage() {
           disabled={isLoading}
           className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"
         >
-          {isLoading ? "Logging in..." : "Login"}
+          {isLoading ? "Signing in..." : "Login"}
         </button>
-
-        <p className="text-sm text-center mt-4">
-          Don't have an account?{" "}
-          <Link to="/register" className="text-blue-600">
-            Register
-          </Link>
-        </p>
       </form>
-    </div>
+
+      <p className="text-sm text-center mt-4">
+        Don't have an account?{" "}
+        <Link to="/register" className="text-yellow-600 font-medium">
+          Register
+        </Link>
+      </p>
+    </AuthLayout>
   );
 }
